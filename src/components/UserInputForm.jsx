@@ -36,6 +36,7 @@ const UserInputForm = () => {
           <button
             className="flex justify-center items-center text-white h-11 w-28 bg-green-500 hover:bg-green-400 active:bg-green-300 rounded-e-md transition-colors"
             type="submit"
+            title="Generate QR"
           >
             <BsQrCode size={25} />
           </button>

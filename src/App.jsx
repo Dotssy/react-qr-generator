@@ -1,5 +1,6 @@
 import UserInputForm from './components/UserInputForm';
 import QRCode from './components/QRCode';
+import Error from './components/Error';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <UserInputForm />
         <QRCode />
       </div>
+      <Error />
     </div>
   );
 }
