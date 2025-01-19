@@ -5,7 +5,8 @@ import { toast } from 'react-toastify';
 import { QRGeneratorContext } from './QRGeneratorContext';
 
 const QRGeneratorProvider = ({ children }) => {
-  const [textInputValue, setTextInputValue] = useState(''); //Basic Text Input value
+  const [userInputValue, setUserInputValue] = useState(''); //Basic Text Input value
+  const [formType, setFormType] = useState('url');
   const [qrData, setQrData] = useState(null);
 
   // Fetch data from text input
@@ -35,13 +36,13 @@ const QRGeneratorProvider = ({ children }) => {
 
   // Handling qr data fetch
   useEffect(() => {
-    if (!textInputValue.length) return;
+    if (!userInputValue.length) return;
 
     setQrData(null);
-    fetchQrData(textInputValue);
-  }, [textInputValue]);
+    fetchQrData(userInputValue);
+  }, [userInputValue]);
 
-  const contextValue = { setTextInputValue, qrData };
+  const contextValue = { setUserInputValue, qrData, formType, setFormType };
 
   return (
     <QRGeneratorContext.Provider value={contextValue}>
