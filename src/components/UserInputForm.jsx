@@ -3,6 +3,7 @@ import UrlForm from './UrlForm';
 import TextForm from './TextForm';
 import EmailForm from './EmailForm';
 import CallForm from './CallForm';
+import SmsForm from './SmsForm';
 import { useQRGeneratorContext } from '../context/QRGeneratorContext';
 
 const UserInputForm = () => {
@@ -17,7 +18,7 @@ const UserInputForm = () => {
       case 'call':
         return <CallForm />;
       case 'sms':
-        return <CallForm />;
+        return <SmsForm />;
       default:
         return <UrlForm />;
     }

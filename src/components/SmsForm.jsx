@@ -4,39 +4,61 @@ import { toast } from 'react-toastify';
 import { useQRGeneratorContext } from '../context/QRGeneratorContext';
 import { filterNumbers } from '../utils/validators';
 import { makeDashedNumber } from '../utils/makeDashedNumber';
+import { countFilledFields } from '../utils/countFilledFields';
 
-//TEL:{number}
+//SMSTO:[Number]:[Text]
 
-const CallForm = () => {
-  const [telephoneNumberData, setTelephoneNumberData] = useState({
+const SmsForm = () => {
+  const [smsData, setSmsData] = useState({
     countryCode: '',
     areaCode: '',
     phoneNumber: '',
+    smsText: '',
   });
   const { setUserInputValue } = useQRGeneratorContext();
-  const { countryCode, areaCode, phoneNumber } = telephoneNumberData;
+  const { countryCode, areaCode, phoneNumber, smsText } = smsData;
 
-  const handlePhoneNumberInputChange = (value, fieldName) => {
+  const handleSmsNumberInputChange = (value, fieldName) => {
     if (filterNumbers(value) || value === '') {
-      setTelephoneNumberData({ ...telephoneNumberData, [fieldName]: value });
+      setSmsData({ ...smsData, [fieldName]: value });
     }
   };
 
-  const handleCallFormSubmit = (e) => {
+  const handleSmsFormSubmit = (e) => {
     e.preventDefault();
 
-    if (!countryCode || !areaCode || !phoneNumber) {
-      return toast.warn('All fields must be filled');
+    //Count of filled phone number fields
+    const filledPhoneFieldsCount = countFilledFields([
+      countryCode,
+      areaCode,
+      phoneNumber,
+    ]);
+
+    //If some but not all number fields filled we display a warning
+    if (filledPhoneFieldsCount > 0 && filledPhoneFieldsCount < 3) {
+      return toast.warn('All phone number fields must be filled');
     }
 
-    const numberData = `TEL:%2B${countryCode}${areaCode}${phoneNumber}`;
-    setUserInputValue(numberData);
+    //If neither phone nor text fields are filled display a warning
+    if (!filledPhoneFieldsCount && !smsText) {
+      return toast.warn(
+        'Either phone number or SMS text fields must be filled'
+      );
+    }
+
+    //Either combined number or empty string
+    const combinedPhoneNumber = `${countryCode}${areaCode}${phoneNumber}`;
+
+    const smsMessageData = `SMSTO:${
+      combinedPhoneNumber ? '%2B' + combinedPhoneNumber : ''
+    }:${smsText}`;
+    setUserInputValue(smsMessageData);
   };
 
   return (
     <form
       className="flex flex-col gap-5 w-full justify-center items-center"
-      onSubmit={handleCallFormSubmit}
+      onSubmit={handleSmsFormSubmit}
     >
       <div className="text-center border-b-[1px] border-gray-400 pb-1">
         <span className="text-gray-400 text-xl font-semibold italic tracking-wider">
@@ -62,7 +84,7 @@ const CallForm = () => {
               value={countryCode}
               maxLength={4}
               onChange={(e) =>
-                handlePhoneNumberInputChange(e.target.value, 'countryCode')
+                handleSmsNumberInputChange(e.target.value, 'countryCode')
               }
             />
           </div>
@@ -82,7 +104,7 @@ const CallForm = () => {
               value={areaCode}
               maxLength={5}
               onChange={(e) =>
-                handlePhoneNumberInputChange(e.target.value, 'areaCode')
+                handleSmsNumberInputChange(e.target.value, 'areaCode')
               }
             />
           </div>
@@ -103,10 +125,24 @@ const CallForm = () => {
             minLength={5}
             maxLength={10}
             onChange={(e) =>
-              handlePhoneNumberInputChange(e.target.value, 'phoneNumber')
+              handleSmsNumberInputChange(e.target.value, 'phoneNumber')
             }
           />
         </div>
+      </div>
+      <div className="w-full">
+        <label
+          htmlFor="sms-text"
+          className="text-gray-400 font-semibold cursor-pointer"
+        >
+          Text (optional)
+        </label>
+        <textarea
+          id="sms-text"
+          className="p-2 mt-1 w-full outline-none text-xl resize-y min-h-20 max-h-[175px] bg-[#d8d8d8] focus:bg-[#f6f6f6] transition-colors rounded-sm"
+          value={smsText}
+          onChange={(e) => setSmsData({ ...smsData, smsText: e.target.value })}
+        ></textarea>
       </div>
       <button
         className="flex justify-center items-center text-white h-11 w-32 bg-green-500 hover:bg-green-400 active:bg-green-300 rounded-md transition-colors"
@@ -119,4 +155,4 @@ const CallForm = () => {
   );
 };
 
-export default CallForm;
+export default SmsForm;
