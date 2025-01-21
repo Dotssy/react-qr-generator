@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { QRGeneratorContext } from './QRGeneratorContext';
+import { displayToast } from '../utils/displayToast';
 
 const QRGeneratorProvider = ({ children }) => {
   const [userInputValue, setUserInputValue] = useState(''); //Basic Text Input value
@@ -30,7 +30,7 @@ const QRGeneratorProvider = ({ children }) => {
         setQrData(transformedImageData);
       })
       .catch((error) => {
-        toast.error(error.message);
+        displayToast('error', error.message);
       });
   };
 

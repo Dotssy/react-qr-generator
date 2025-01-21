@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { BsQrCode } from 'react-icons/bs';
 import { useQRGeneratorContext } from '../context/QRGeneratorContext';
+import { displayToast } from '../utils/displayToast';
+import { isEmailValid } from '../utils/validators';
 
 //MATMSG:TO:{email};SUB:{subject};BODY:{message};;
 
@@ -15,7 +17,14 @@ const EmailForm = () => {
   const handleEmailFormSubmit = (e) => {
     e.preventDefault();
 
-    if (!emailData.email.length) return;
+    if (!emailData.email.length) {
+      return displayToast('warn', 'Email field must be filled');
+    }
+
+    if (!isEmailValid(emailData.email)) {
+      return displayToast('warn', 'Please enter a valid email format');
+    }
+
     const { email, subject, text } = emailData;
     const combinedMailData = `MATMSG:TO:${email};SUB:${subject};BODY:${text};;`;
     setUserInputValue(combinedMailData);

@@ -1,0 +1,8 @@
+/* Override of standard toast styles */
+.Toastify__toast {
+  width: fit-content;
+  padding: 1.5rem 1rem;
+  min-width: 18.75rem;
+  background-color: #2e2d2d;
+  color: #fff;
+}

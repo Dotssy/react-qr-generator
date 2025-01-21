@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BsQrCode } from 'react-icons/bs';
-import { toast } from 'react-toastify';
 import { useQRGeneratorContext } from '../context/QRGeneratorContext';
+import { displayToast } from '../utils/displayToast';
 import { filterNumbers } from '../utils/validators';
 import { makeDashedNumber } from '../utils/makeDashedNumber';
 import { countFilledFields } from '../utils/countFilledFields';
@@ -36,13 +36,22 @@ const SmsForm = () => {
 
     //If some but not all number fields filled we display a warning
     if (filledPhoneFieldsCount > 0 && filledPhoneFieldsCount < 3) {
-      return toast.warn('All phone number fields must be filled');
+      return displayToast('warn', 'All phone number fields must be filled');
     }
 
     //If neither phone nor text fields are filled display a warning
     if (!filledPhoneFieldsCount && !smsText) {
-      return toast.warn(
+      return displayToast(
+        'warn',
         'Either phone number or SMS text fields must be filled'
+      );
+    }
+
+    //Failsafe for autofilling less than 5 digits in phoneNumber field
+    if (phoneNumber.length && phoneNumber.length < 5) {
+      return displayToast(
+        'warn',
+        'Phone number must be at least 5 digits long'
       );
     }
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BsQrCode } from 'react-icons/bs';
-import { toast } from 'react-toastify';
 import { useQRGeneratorContext } from '../context/QRGeneratorContext';
+import { displayToast } from '../utils/displayToast';
 import { filterNumbers } from '../utils/validators';
 import { makeDashedNumber } from '../utils/makeDashedNumber';
 
@@ -26,7 +26,15 @@ const CallForm = () => {
     e.preventDefault();
 
     if (!countryCode || !areaCode || !phoneNumber) {
-      return toast.warn('All fields must be filled');
+      return displayToast('warn', 'All fields must be filled');
+    }
+
+    //Failsafe for autofilling less than 5 digits in phoneNumber field
+    if (phoneNumber.length < 5) {
+      return displayToast(
+        'warn',
+        'Phone number must be at least 5 digits long'
+      );
     }
 
     const numberData = `TEL:%2B${countryCode}${areaCode}${phoneNumber}`;
