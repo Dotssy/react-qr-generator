@@ -1,7 +1,6 @@
 import { useQRGeneratorContext } from '../context/QRGeneratorContext';
 import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
-
-const formTypes = ['url', 'text', 'email', 'call', 'sms'];
+import formTypes from '../data/formTypes';
 
 const FormTypeSelect = () => {
   const { setFormType } = useQRGeneratorContext();
@@ -16,42 +15,26 @@ const FormTypeSelect = () => {
       className="flex justify-center gap-5 flex-wrap"
     >
       {formTypes.map((formName, i) => {
-        if (i === 0) {
-          return (
-            <div key={i}>
-              <label
-                htmlFor={formName}
-                className="text-gray-400 mr-1 cursor-pointer"
-              >
-                {formName.toUpperCase()}
-              </label>
-              <input
-                type="radio"
-                defaultChecked
-                id={formName}
-                name="form-type"
-                value={formName}
-              />
-            </div>
-          );
-        } else {
-          return (
-            <div key={i}>
-              <label
-                htmlFor={formName}
-                className="text-gray-400 mr-1 cursor-pointer"
-              >
-                {capitalizeFirstLetter(formName)}
-              </label>
-              <input
-                type="radio"
-                id={formName}
-                name="form-type"
-                value={formName}
-              />
-            </div>
-          );
-        }
+        return (
+          <div key={i} className="flex items-center">
+            <label
+              htmlFor={formName}
+              className="text-gray-400 mr-1 cursor-pointer"
+            >
+              {formName === 'url' || formName === 'sms'
+                ? formName.toUpperCase()
+                : capitalizeFirstLetter(formName)}
+            </label>
+            <input
+              className="h-4 w-4 accent-green-300 checked:animate-bounce"
+              type="radio"
+              defaultChecked={i === 0 ? true : false}
+              id={formName}
+              name="form-type"
+              value={formName}
+            />
+          </div>
+        );
       })}
     </form>
   );

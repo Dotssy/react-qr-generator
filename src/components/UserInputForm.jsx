@@ -9,8 +9,11 @@ import { useQRGeneratorContext } from '../context/QRGeneratorContext';
 const UserInputForm = () => {
   const { formType } = useQRGeneratorContext();
 
+  //Valid form components must be assigned
   const formTypeSelectSwitch = (formType) => {
     switch (formType) {
+      case 'url':
+        return <UrlForm />;
       case 'text':
         return <TextForm />;
       case 'email':
@@ -20,7 +23,11 @@ const UserInputForm = () => {
       case 'sms':
         return <SmsForm />;
       default:
-        return <UrlForm />;
+        return (
+          <div className="text-yellow-300 text-xl">
+            <h4>Warning: no form component assigned!</h4>
+          </div>
+        );
     }
   };
 

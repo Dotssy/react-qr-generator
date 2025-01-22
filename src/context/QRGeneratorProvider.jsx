@@ -3,15 +3,19 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { QRGeneratorContext } from './QRGeneratorContext';
 import { displayToast } from '../utils/displayToast';
+import formTypes from '../data/formTypes';
 
 const QRGeneratorProvider = ({ children }) => {
   const [userInputValue, setUserInputValue] = useState(''); //Basic Text Input value
-  const [formType, setFormType] = useState('url');
+  const [formType, setFormType] = useState(formTypes[0]);
   const [qrData, setQrData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fetch data from text input
   const fetchQrData = (textValue) => {
     const fetchDataUrl = `https://api.qrserver.com/v1/create-qr-code/?size=284x284&data=${textValue}`;
+
+    setIsLoading(true);
 
     axios
       .get(fetchDataUrl, { responseType: 'arraybuffer' })
@@ -28,9 +32,11 @@ const QRGeneratorProvider = ({ children }) => {
         ].toLowerCase()};base64,${image}`;
 
         setQrData(transformedImageData);
+        setIsLoading(false);
       })
       .catch((error) => {
         displayToast('error', error.message);
+        setIsLoading(false);
       });
   };
 
@@ -42,7 +48,13 @@ const QRGeneratorProvider = ({ children }) => {
     fetchQrData(userInputValue);
   }, [userInputValue]);
 
-  const contextValue = { setUserInputValue, qrData, formType, setFormType };
+  const contextValue = {
+    setUserInputValue,
+    qrData,
+    formType,
+    setFormType,
+    isLoading,
+  };
 
   return (
     <QRGeneratorContext.Provider value={contextValue}>

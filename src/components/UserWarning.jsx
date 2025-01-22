@@ -1,7 +1,8 @@
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import '../styles/custom-toast-styles.css';
 
-const Error = () => {
+const UserWarning = () => {
   return (
     <ToastContainer
       position="top-right"
@@ -13,4 +14,4 @@ const Error = () => {
   );
 };
 
-export default Error;
+export default UserWarning;
