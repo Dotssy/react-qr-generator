@@ -36,6 +36,7 @@ const QRGeneratorProvider = ({ children }) => {
       })
       .catch((error) => {
         displayToast('error', error.message);
+        setUserInputValue('');
         setIsLoading(false);
       });
   };
