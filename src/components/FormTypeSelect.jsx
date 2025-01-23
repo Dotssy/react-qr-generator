@@ -26,7 +26,7 @@ const FormTypeSelect = () => {
                 : capitalizeFirstLetter(formName)}
             </label>
             <input
-              className="h-4 w-4 accent-green-300 checked:animate-bounce"
+              className="h-4 w-4 accent-green-300 checked:animate-bounce max-[740px]:checked:animate-none"
               type="radio"
               defaultChecked={i === 0 ? true : false}
               id={formName}
